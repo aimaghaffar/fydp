@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { 
@@ -14,6 +14,7 @@ import {
   FaClock,
   FaEye
 } from 'react-icons/fa';
+import { doctorsAPI } from '../../services/api';
 
 const SearchPageContainer = styled.div`
   min-height: 100vh;
@@ -323,6 +324,7 @@ const NoResults = styled.div`
 
 const SearchDoctorsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState({
@@ -332,9 +334,6 @@ const SearchDoctorsPage = () => {
     experience: '',
     availability: ''
   });
-
-  // Mock data for doctors
-  const mockDoctors = [
     {
       id: 1,
       name: "Dr. Ahmed Khan",
@@ -410,18 +409,32 @@ const SearchDoctorsPage = () => {
   ];
 
   useEffect(() => {
-    // Simulate API call
-    setLoading(true);
-    setTimeout(() => {
-      setDoctors(mockDoctors);
-      setLoading(false);
-    }, 1000);
+    fetchDoctors();
   }, []);
 
-  const handleSearch = (e) => {
+  const fetchDoctors = async () => {
+    setLoading(true);
+    try {
+      const response = await doctorsAPI.getAll();
+      setDoctors(response.data.data);
+    } catch (error) {
+      console.error('Error fetching doctors:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSearch = async (e) => {
     e.preventDefault();
-    // Handle search logic here
-    console.log('Searching with filters:', filters);
+    setLoading(true);
+    try {
+      const response = await doctorsAPI.getAll(filters);
+      setDoctors(response.data.data);
+    } catch (error) {
+      console.error('Error searching doctors:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleFilterChange = (filterType, value) => {
@@ -432,13 +445,11 @@ const SearchDoctorsPage = () => {
   };
 
   const handleBookAppointment = (doctorId) => {
-    // Navigate to booking page
-    console.log('Booking appointment for doctor:', doctorId);
+    navigate(`/booking/${doctorId}`);
   };
 
   const handleViewProfile = (doctorId) => {
-    // Navigate to doctor profile
-    console.log('Viewing profile for doctor:', doctorId);
+    navigate(`/doctor/${doctorId}`);
   };
 
   return (

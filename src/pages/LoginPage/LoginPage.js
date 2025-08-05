@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaGoogle, FaFacebook } from 'react-icons/fa';
+import { authAPI } from '../../services/api';
 
 const LoginPageContainer = styled.div`
   min-height: 100vh;
@@ -252,16 +253,21 @@ const LoginPage = () => {
     setLoading(true);
     setError('');
 
-    // Simulate API call
-    setTimeout(() => {
-      if (formData.email && formData.password) {
-        // Success - navigate to dashboard
-        navigate('/dashboard');
-      } else {
-        setError('Please fill in all fields');
-      }
+    try {
+      const response = await authAPI.login(formData);
+      const { token, user } = response.data;
+      
+      // Store token and user data
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+      
+      // Navigate to dashboard
+      navigate('/dashboard');
+    } catch (error) {
+      setError(error.response?.data?.message || 'Login failed. Please try again.');
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   const handleSocialLogin = (provider) => {

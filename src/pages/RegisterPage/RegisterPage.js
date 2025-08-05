@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FaUser, FaEnvelope, FaLock, FaPhone, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { authAPI } from '../../services/api';
 
 const RegisterPageContainer = styled.div`
   min-height: 100vh;
@@ -200,11 +201,21 @@ const RegisterPage = () => {
       return;
     }
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const userData = {
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        password: formData.password,
+        phone: formData.phone
+      };
+
+      await authAPI.register(userData);
       navigate('/login');
+    } catch (error) {
+      setError(error.response?.data?.message || 'Registration failed. Please try again.');
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   return (

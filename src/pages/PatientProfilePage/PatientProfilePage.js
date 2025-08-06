@@ -43,8 +43,7 @@ const PatientProfilePage = () => {
   useEffect(() => {
     const fetchPatient = async () => {
       try {
-        // For demo, use getProfile (should be get by id in real app)
-        const res = await usersAPI.getProfile();
+        const res = await usersAPI.getById(id);
         setPatient(res.data.data);
       } catch (e) {
         setPatient(null);

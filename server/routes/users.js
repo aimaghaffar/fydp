@@ -213,4 +213,32 @@ router.delete('/medical-history/:id', auth, async (req, res) => {
   }
 });
 
+// @route   GET /api/users
+// @desc    Get all users (patients)
+// @access  Public (for demo)
+router.get('/', async (req, res) => {
+  try {
+    res.json({
+      success: true,
+      count: users.length,
+      data: users
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// @route   GET /api/users/:id
+// @desc    Get user by ID (patient profile)
+// @access  Public (for demo)
+router.get('/:id', async (req, res) => {
+  try {
+    const user = users.find(u => u.id === parseInt(req.params.id));
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json({ success: true, data: user });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 module.exports = router;

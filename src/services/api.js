@@ -70,6 +70,8 @@ export const usersAPI = {
   getMedicalHistory: () => api.get('/users/medical-history'),
   addMedicalHistory: (data) => api.post('/users/medical-history', data),
   deleteMedicalHistory: (id) => api.delete(`/users/medical-history/${id}`),
+  getAll: () => api.get('/users'),
+  getById: (id) => api.get(`/users/${id}`),
 };
 
 // Specialties API

@@ -19,6 +19,9 @@ import DashboardPage from './pages/DashboardPage/DashboardPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import AboutPage from './pages/AboutPage/AboutPage';
 import ContactPage from './pages/ContactPage/ContactPage';
+import AppointmentDetailPage from './pages/AppointmentDetailPage/AppointmentDetailPage';
+import DoctorDetailPage from './pages/DoctorDetailPage/DoctorDetailPage';
+import PatientProfilePage from './pages/PatientProfilePage/PatientProfilePage';
 
 function App() {
   return (
@@ -39,6 +42,9 @@ function App() {
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/appointment/:id" element={<AppointmentDetailPage />} />
+              <Route path="/doctor-detail/:id" element={<DoctorDetailPage />} />
+              <Route path="/patient/:id" element={<PatientProfilePage />} />
             </Routes>
           </main>
           <Footer />
